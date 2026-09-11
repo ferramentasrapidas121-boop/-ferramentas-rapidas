@@ -1,0 +1,36 @@
+name: Publicar Ferramentas Rápidas
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Baixar repositório
+        uses: actions/checkout@v4
+
+      - name: Preparar arquivos do site
+        run: |
+          mkdir site
+          unzip -o ferramentas-rapidas-site-final.zip -d site
+
+      - name: Configurar GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Enviar arquivos para publicação
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - name: Publicar site
+        id: deployment
+        uses: actions/deploy-pages@v4
